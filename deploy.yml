@@ -1,0 +1,21 @@
+- name: Deploy Static Website
+  hosts: all
+  become: yes
+  tasks:
+    - name: Clonar repositorio
+      ansible.builtin.git:
+        repo: https://github.com/MartinM-17/cicd-pipeline-jenkins-ansible-nginx-apache.git
+        dest: /var/www/html
+        update: yes
+
+    - name: Copiar archivo index.html a Nginx
+      copy:
+        src: /var/www/html/index.html
+        dest: /usr/share/nginx/html/index.html
+      when: "'nginx' in group_names"
+
+    - name: Copiar archivo index.html a Apache
+      copy:
+        src: /var/www/html/index.html
+        dest: /var/www/html/index.html
+      when: "'apache' in group_names"
